@@ -18,9 +18,9 @@
  */
 package org.apache.shindig.social.opensocial.spi;
 
-import java.util.regex.Pattern;
-
 import com.google.common.base.Objects;
+
+import java.util.regex.Pattern;
 
 /**
  * LocalId as defined by the OpenSocial 2.0.1 Spec
@@ -28,77 +28,80 @@ import com.google.common.base.Objects;
  */
 public class LocalId {
 
-  private String localId;
-  private static final Pattern localIdPattern = Pattern.compile("[\\w.-]*");
+    private String localId;
 
-  /**
-   * Constructor for LocalId.
-   *
-   * @param localId String to try and create LocalId from
-   * @throws IllegalArgumentException
-   */
-  public LocalId(String localId) throws IllegalArgumentException {
-    if(localId != null) {
-      setLocalId(localId);
-    } else {
-      setLocalId("");
+    private static final Pattern localIdPattern = Pattern.compile("[\\w.\\:-]*");
+
+    /**
+     * Constructor for LocalId.
+     *
+     * @param localId String to try and create LocalId from
+     * @throws IllegalArgumentException
+     */
+    public LocalId(String localId) throws IllegalArgumentException {
+        if(localId != null) {
+            setLocalId(localId);
+        } else {
+            setLocalId("");
+        }
     }
-  }
 
-  /**
-   * Validate localId is of the from defined in spec.
-   *
-   * @param localId String
-   * @return boolean If validation passes
-   */
-  private boolean validate(String localId) {
-    return localIdPattern.matcher(localId).matches();
-  }
-
-  /**
-   * Get the stored localId.
-   *
-   * @return localId String
-   */
-  public String getLocalId() {
-    return this.localId;
-  }
-
-  /**
-   * Sets the localId after validating its format
-   *
-   * @param localId String
-   * @return boolean If succeeded
-   * @throws IllegalArgumentException
-   */
-  public boolean setLocalId(String localId) throws IllegalArgumentException {
-    if(validate(localId)) {
-      this.localId = localId;
-      return true;
-    } else {
-      throw new IllegalArgumentException("The provided LocalId is not valid");
+    /**
+     * Validate localId is of the from defined in spec.
+     *
+     * @param localId String
+     * @return boolean If validation passes
+     */
+    private boolean validate(String localId) {
+        return localIdPattern.matcher(localId).matches();
     }
-  }
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == this) {
-      return true;
+    /**
+     * Get the stored localId.
+     *
+     * @return localId String
+     */
+    public String getLocalId() {
+        return this.localId;
     }
-    if (!(o instanceof LocalId)) {
-      return false;
+
+    /**
+     * Sets the localId after validating its format
+     *
+     * @param localId String
+     * @return boolean If succeeded
+     * @throws IllegalArgumentException
+     */
+    public boolean setLocalId(String localId) throws IllegalArgumentException {
+        this.localId = localId;
+
+        if(validate(localId)) {
+            this.localId = localId;
+            return true;
+        } else {
+            throw new IllegalArgumentException("The provided LocalId is not valid");
+        }
     }
-    LocalId actual = (LocalId) o;
-    return this.getLocalId().equals(actual.getLocalId());
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(this.localId);
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof LocalId)) {
+            return false;
+        }
+        LocalId actual = (LocalId) o;
+        return this.getLocalId().equals(actual.getLocalId());
+    }
 
-  @Override
-  public String toString() {
-    return this.localId;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.localId);
+    }
+
+    @Override
+    public String toString() {
+        return this.localId;
+    }
 }

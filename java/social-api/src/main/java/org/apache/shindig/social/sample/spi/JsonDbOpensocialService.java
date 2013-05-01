@@ -18,16 +18,13 @@
  */
 package org.apache.shindig.social.sample.spi;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Future;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import org.apache.commons.io.IOUtils;
 import org.apache.shindig.auth.AnonymousSecurityToken;
 import org.apache.shindig.auth.SecurityToken;
@@ -41,43 +38,22 @@ import org.apache.shindig.protocol.conversion.BeanConverter;
 import org.apache.shindig.protocol.model.SortOrder;
 import org.apache.shindig.social.core.model.NameImpl;
 import org.apache.shindig.social.core.model.PersonImpl;
-import org.apache.shindig.social.opensocial.model.Activity;
-import org.apache.shindig.social.opensocial.model.ActivityEntry;
-import org.apache.shindig.social.opensocial.model.Album;
-import org.apache.shindig.social.opensocial.model.Group;
-import org.apache.shindig.social.opensocial.model.MediaItem;
-import org.apache.shindig.social.opensocial.model.Message;
-import org.apache.shindig.social.opensocial.model.MessageCollection;
-import org.apache.shindig.social.opensocial.model.Person;
-import org.apache.shindig.social.opensocial.spi.ActivityService;
-import org.apache.shindig.social.opensocial.spi.ActivityStreamService;
-import org.apache.shindig.social.opensocial.spi.AlbumService;
-import org.apache.shindig.social.opensocial.spi.AppDataService;
-import org.apache.shindig.social.opensocial.spi.CollectionOptions;
-import org.apache.shindig.social.opensocial.spi.GroupId;
-import org.apache.shindig.social.opensocial.spi.GroupService;
-import org.apache.shindig.social.opensocial.spi.MediaItemService;
-import org.apache.shindig.social.opensocial.spi.MessageService;
-import org.apache.shindig.social.opensocial.spi.PersonService;
-import org.apache.shindig.social.opensocial.spi.UserId;
+import org.apache.shindig.social.opensocial.model.*;
+import org.apache.shindig.social.opensocial.spi.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
+import java.util.concurrent.Future;
 
 /**
  * Implementation of supported services backed by a JSON DB.
  */
 @Singleton
 public class JsonDbOpensocialService implements ActivityService, PersonService, AppDataService,
-    MessageService, AlbumService, MediaItemService, ActivityStreamService, GroupService {
+    MessageService, AlbumService, MediaItemService, ActivityStreamService, GroupService, ResourceService {
 
   private static final Comparator<Person> NAME_COMPARATOR = new Comparator<Person>() {
     public int compare(Person person, Person person1) {
@@ -1490,4 +1466,11 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
     }
     return converter.convertToObject(objectVal, clz);
   }
+
+    @Override
+    public Future<Resource> getResources(UserId userId, String groupId, SecurityToken token)
+            throws ProtocolException {
+        throw new ProtocolException(HttpServletResponse.SC_NOT_IMPLEMENTED,
+                "this functionality is not yet available");
+    }
 }

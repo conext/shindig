@@ -1,0 +1,12 @@
+<feature>
+    <name>resources</name>
+    <dependency>globals</dependency>
+    <gadget>
+        <script src="resources_client.js"/>
+        <script src="taming.js"/>
+    </gadget>
+    <container>
+        <script src="resources_client.js"/>
+        <script src="taming.js"/>
+    </container>
+</feature>

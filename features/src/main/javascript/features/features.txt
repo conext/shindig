@@ -109,3 +109,4 @@ features/taming/feature.xml
 features/views/feature.xml
 features/xhrwrapper/feature.xml
 features/xmlutil/feature.xml
+features/resources/feature.xml
