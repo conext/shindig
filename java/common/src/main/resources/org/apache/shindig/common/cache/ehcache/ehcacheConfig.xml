@@ -69,7 +69,7 @@ under the License.
   <cache name="CompiledJs"
     statistics="true"
     eternal="true"
-    overflowToDisk="true"
+    overflowToDisk="false"
     diskPersistent="false"
     maxBytesLocalDisk="10m"
     memoryStoreEvictionPolicy="LFU"/>
