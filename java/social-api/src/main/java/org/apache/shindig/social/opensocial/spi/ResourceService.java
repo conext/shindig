@@ -25,4 +25,16 @@ public interface ResourceService {
             String groupId,
             SecurityToken token) throws ProtocolException;
 
+    public Future<Resource> createResource(
+            UserId userId,
+            String groupId,
+            String resourceObj,
+            SecurityToken token) throws ProtocolException;
+
+    public Future<Resource> deleteResource(
+            UserId userId,
+            String groupId,
+            String resourceId,
+            SecurityToken token) throws ProtocolException;
+
 }

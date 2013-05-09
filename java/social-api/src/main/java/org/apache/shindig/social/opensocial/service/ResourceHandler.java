@@ -19,6 +19,9 @@ import java.util.concurrent.Future;
 public class ResourceHandler {
 
     public static final String GROUPID = "groupId";
+    public static final String RESOURCE = "resource";
+    public static final String RESOURCE_OBJ = "resourceObj";
+    public static final String RESOURCEID = "resourceId";
 
     private final ResourceService service;
 
@@ -39,6 +42,36 @@ public class ResourceHandler {
         HandlerPreconditions.requireSingular(userIds, "Only one userId must be specified");
 
         return service.getResources(userIds.iterator().next(), groupId, request.getToken());
+    }
+
+    @Operation(httpMethods = "GET")
+    public Future<?> createResource(SocialRequestItem request) throws ProtocolException {
+
+        Set<UserId> userIds = request.getUsers();
+        String groupId = request.getParameter(GROUPID);
+        String resourceObj = request.getParameter(RESOURCE);
+        CollectionOptions options = new CollectionOptions(request);
+
+        // Preconditions
+        HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
+        HandlerPreconditions.requireSingular(userIds, "Only one userId must be specified");
+
+        return service.createResource(userIds.iterator().next(), groupId, resourceObj, request.getToken());
+    }
+
+    @Operation(httpMethods = "GET")
+    public Future<?> deleteResource(SocialRequestItem request) throws ProtocolException {
+
+        Set<UserId> userIds = request.getUsers();
+        String groupId = request.getParameter(GROUPID);
+        String resourceId = request.getParameter(RESOURCEID);
+        CollectionOptions options = new CollectionOptions(request);
+
+        // Preconditions
+        HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
+        HandlerPreconditions.requireSingular(userIds, "Only one userId must be specified");
+
+        return service.deleteResource(userIds.iterator().next(), groupId, resourceId, request.getToken());
     }
 }
 

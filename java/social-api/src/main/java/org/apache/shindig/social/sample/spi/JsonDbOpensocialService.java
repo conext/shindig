@@ -1473,4 +1473,18 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         throw new ProtocolException(HttpServletResponse.SC_NOT_IMPLEMENTED,
                 "this functionality is not yet available");
     }
+
+    @Override
+    public Future<Resource> createResource(UserId userId, String groupId, String resourceObj, SecurityToken token)
+            throws ProtocolException {
+        throw new ProtocolException(HttpServletResponse.SC_NOT_IMPLEMENTED,
+                "this functionality is not yet available");
+    }
+
+    @Override
+    public Future<Resource> deleteResource(UserId userId, String groupId, String resourceId, SecurityToken token)
+            throws ProtocolException {
+        throw new ProtocolException(HttpServletResponse.SC_NOT_IMPLEMENTED,
+                "this functionality is not yet available");
+    }
 }
