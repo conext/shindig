@@ -19,9 +19,7 @@ import java.util.concurrent.Future;
 public class ResourceHandler {
 
     public static final String GROUPID = "groupId";
-    public static final String RESOURCE = "resource";
-    public static final String RESOURCE_OBJ = "resourceObj";
-    public static final String RESOURCEID = "resourceId";
+    public static final String OBJ = "obj";
 
     private final ResourceService service;
 
@@ -49,14 +47,14 @@ public class ResourceHandler {
 
         Set<UserId> userIds = request.getUsers();
         String groupId = request.getParameter(GROUPID);
-        String resourceObj = request.getParameter(RESOURCE);
+        String obj = request.getParameter(OBJ);
         CollectionOptions options = new CollectionOptions(request);
 
         // Preconditions
         HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
         HandlerPreconditions.requireSingular(userIds, "Only one userId must be specified");
 
-        return service.createResource(userIds.iterator().next(), groupId, resourceObj, request.getToken());
+        return service.createResource(userIds.iterator().next(), groupId, obj, request.getToken());
     }
 
     @Operation(httpMethods = "GET")
@@ -64,14 +62,14 @@ public class ResourceHandler {
 
         Set<UserId> userIds = request.getUsers();
         String groupId = request.getParameter(GROUPID);
-        String resourceId = request.getParameter(RESOURCEID);
+        String obj = request.getParameter(OBJ);
         CollectionOptions options = new CollectionOptions(request);
 
         // Preconditions
         HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
         HandlerPreconditions.requireSingular(userIds, "Only one userId must be specified");
 
-        return service.deleteResource(userIds.iterator().next(), groupId, resourceId, request.getToken());
+        return service.deleteResource(userIds.iterator().next(), groupId, obj, request.getToken());
     }
 }
 
