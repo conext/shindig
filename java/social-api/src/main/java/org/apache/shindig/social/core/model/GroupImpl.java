@@ -18,10 +18,10 @@
  */
 package org.apache.shindig.social.core.model;
 
-import java.util.Map;
-
 import org.apache.shindig.social.opensocial.model.Group;
 import org.apache.shindig.social.opensocial.spi.GroupId;
+
+import java.util.Map;
 
 /**
  * Default Implementation of the {@link org.apache.shindig.social.opensocial.model.Group} model.
@@ -30,46 +30,57 @@ import org.apache.shindig.social.opensocial.spi.GroupId;
  */
 public class GroupImpl implements Group {
 
-  private GroupId id;
-  private String title;
-  private String description;
+    private GroupId id;
+    private String title;
+    private String description;
+    private String vootMembershipRole;
 
-  /** {@inheritDoc} */
-  public String getTitle() {
-    return title;
-  }
-
-  /** {@inheritDoc} */
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  /** {@inheritDoc} */
-  public String getDescription() {
-    return description;
-  }
-
-  /** {@inheritDoc} */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /** {@inheritDoc} */
-  public void setId(Object id) throws IllegalArgumentException {
-    if(id instanceof String) {
-      this.id = new GroupId(id);
-    } else if(id instanceof GroupId) {
-      this.id = (GroupId) id;
-    // Coming from JSON
-    } else if(id instanceof Map) {
-      this.id = new GroupId(((Map) id).get("value"));
-    } else {
-      throw new IllegalArgumentException("The provided GroupId is not valid");
+    /** {@inheritDoc} */
+    public String getTitle() {
+        return title;
     }
-  }
 
-  /** {@inheritDoc} */
-  public String getId() {
-    return this.id.toString();
-  }
+    /** {@inheritDoc} */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /** {@inheritDoc} */
+    public String getDescription() {
+        return description;
+    }
+
+    /** {@inheritDoc} */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getVootMembershipRole() {
+        return vootMembershipRole;
+    }
+
+    @Override
+    public void setVootMembershipRole(String role) {
+        this.vootMembershipRole = role;
+    }
+
+    /** {@inheritDoc} */
+    public void setId(Object id) throws IllegalArgumentException {
+        if(id instanceof String) {
+            this.id = new GroupId(id);
+        } else if(id instanceof GroupId) {
+            this.id = (GroupId) id;
+            // Coming from JSON
+        } else if(id instanceof Map) {
+            this.id = new GroupId(((Map) id).get("value"));
+        } else {
+            throw new IllegalArgumentException("The provided GroupId is not valid");
+        }
+    }
+
+    /** {@inheritDoc} */
+    public String getId() {
+        return this.id.toString();
+    }
 }

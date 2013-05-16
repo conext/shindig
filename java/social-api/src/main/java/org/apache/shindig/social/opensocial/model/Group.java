@@ -46,116 +46,137 @@ import com.google.inject.ImplementedBy;
 @Exportablebean
 public interface Group {
 
-  public static enum Field {
-    /**
-     * Unique ID for this group Required.
-     */
-    ID("id"),
+    public static enum Field {
+        /**
+         * Unique ID for this group Required.
+         */
+        ID("id"),
 
-    /**
-     * Title of group Required.
-     */
-    TITLE("title"),
+        /**
+         * Title of group Required.
+         */
+        TITLE("title"),
 
-    /**
-     * Description of group Optional.
-     */
-    DESCRIPTION("description");
+        /**
+         * Description of group Optional.
+         */
+        DESCRIPTION("description"),
 
-    /**
-     * A Map to convert JSON string to Field representations.
-     */
-    private static final Map<String,Field> LOOKUP = Maps.uniqueIndex(
-        EnumSet.allOf(Field.class), Functions.toStringFunction());
+        /**
+         * Role of the user Optional.
+         */
+        VOOT_MEMBERSHIP_ROLE("voot_membership_role");
 
-    /**
-     * The set of all fields.
-     */
-    public static final Set<String> ALL_FIELDS = LOOKUP.keySet();
+        /**
+         * A Map to convert JSON string to Field representations.
+         */
+        private static final Map<String,Field> LOOKUP = Maps.uniqueIndex(
+                EnumSet.allOf(Field.class), Functions.toStringFunction());
 
-    /**
-     * The set of default fields returned fields.
-     */
-    public static final Set<String> DEFAULT_FIELDS = ImmutableSet.of(
-        ID.toString(),
-        TITLE.toString(),
-        DESCRIPTION.toString());
+        /**
+         * The set of all fields.
+         */
+        public static final Set<String> ALL_FIELDS = LOOKUP.keySet();
 
-    /**
-     * The JSON field that the instance represents.
-     */
-    private final String jsonString;
+        /**
+         * The set of default fields returned fields.
+         */
+        public static final Set<String> DEFAULT_FIELDS = ImmutableSet.of(
+                ID.toString(),
+                TITLE.toString(),
+                DESCRIPTION.toString(),
+                VOOT_MEMBERSHIP_ROLE.toString());
 
-    /**
-     * Create a field base on the a JSON element.
-     *
-     * @param jsonString the name of the element
-     */
-    private Field(String jsonString) {
-      this.jsonString = jsonString;
+        /**
+         * The JSON field that the instance represents.
+         */
+        private final String jsonString;
+
+        /**
+         * Create a field base on the a JSON element.
+         *
+         * @param jsonString the name of the element
+         */
+        private Field(String jsonString) {
+            this.jsonString = jsonString;
+        }
+
+        /**
+         * Emit the field as a JSON element.
+         *
+         * @return the field name
+         */
+        @Override
+        public String toString() {
+            return this.jsonString;
+        }
+
+        /**
+         * Converts from a url string (usually passed in the fields= parameter) into the
+         * corresponding field enum.
+         *
+         * @param jsonString The string to translate.
+         * @return The corresponding group field.
+         */
+        public static Group.Field fromUrlString(String jsonString) {
+            return LOOKUP.get(jsonString);
+        }
     }
 
     /**
-     * Emit the field as a JSON element.
+     * Get ID of this group
      *
-     * @return the field name
+     * @return groupId for group
      */
-    @Override
-    public String toString() {
-      return this.jsonString;
-    }
+    String getId();
 
     /**
-     * Converts from a url string (usually passed in the fields= parameter) into the
-     * corresponding field enum.
+     * Set the default group id
      *
-     * @param jsonString The string to translate.
-     * @return The corresponding group field.
+     * @param id a valid GroupId representation
      */
-    public static Group.Field fromUrlString(String jsonString) {
-      return LOOKUP.get(jsonString);
-    }
-  }
+    void setId(Object id);
 
-  /**
-   * Get ID of this group
-   *
-   * @return groupId for group
-   */
-  String getId();
+    /**
+     * Get title of this group
+     *
+     * @return title of the group
+     */
+    String getTitle();
 
-  /**
-   * Set the default group id
-   *
-   * @param id a valid GroupId representation
-   */
-  void setId(Object id);
+    /**
+     * Sets the title of this group
+     *
+     * @param title a valid title
+     */
+    void setTitle(String title);
 
-  /**
-   * Get title of this group
-   *
-   * @return title of the group
-   */
-  String getTitle();
+    /**
+     * Get the description of this group
+     *
+     * @return description of group
+     */
+    String getDescription();
 
-  /**
-   * Sets the title of this group
-   *
-   * @param title a valid title
-   */
-  void setTitle(String title);
+    /**
+     * Sets the description of this group
+     *
+     * @param description a valid description
+     */
+    void setDescription(String description);
 
-  /**
-   * Get the description of this group
-   *
-   * @return description of group
-   */
-  String getDescription();
+    /**
+     * Get the role of the user for this group
+     *
+     * @return role of the user for the group
+     */
+    String getVootMembershipRole();
 
-  /**
-   * Sets the description of this group
-   *
-   * @param description a valid description
-   */
-  void setDescription(String description);
+    /**
+     * Sets the for for the user of this group
+     *
+     * @param role a valid role
+     */
+    void setVootMembershipRole(String role);
+
 }
