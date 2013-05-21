@@ -328,14 +328,14 @@ public class OAuthRequest {
     if (pageOwner == null || pageViewer == null) {
       throw new OAuthRequestException(OAuthError.UNAUTHENTICATED);
     }
-    if (!fetcherConfig.isViewerAccessTokensEnabled() && !pageOwner.equals(pageViewer)) {
-      throw new OAuthRequestException(OAuthError.NOT_OWNER);
-    }
-    if (stateOwner != null && !stateOwner.equals(pageViewer)) {
-      throw new OAuthRequestException(OAuthError.UNKNOWN_PROBLEM,
-          "Client state belongs to a different person " +
-          "(state owner=" + stateOwner + ", pageViewer=" + pageViewer + ')');
-    }
+//    if (!fetcherConfig.isViewerAccessTokensEnabled() && !pageOwner.equals(pageViewer)) {
+//      throw new OAuthRequestException(OAuthError.NOT_OWNER);
+//    }
+//    if (stateOwner != null && !stateOwner.equals(pageViewer)) {
+//      throw new OAuthRequestException(OAuthError.UNKNOWN_PROBLEM,
+//          "Client state belongs to a different person " +
+//          "(state owner=" + stateOwner + ", pageViewer=" + pageViewer + ')');
+//    }
   }
 
   private void fetchRequestToken() throws OAuthRequestException, OAuthProtocolException {
