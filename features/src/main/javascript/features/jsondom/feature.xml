@@ -29,6 +29,7 @@ specific language governing permissions and limitations under the License.
   -->
   <name>jsondom</name>
   <dependency>globals</dependency>
+  <dependency>domnode</dependency>
   <dependency>xmlutil</dependency>
   <gadget>
     <script src="jsondom.js"/>

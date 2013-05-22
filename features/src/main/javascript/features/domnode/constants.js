@@ -16,17 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.shindig.gadgets.js;
-
-import com.google.inject.AbstractModule;
-
-/**
- * Guice configuration for the Javascript compilation.
- */
-public class JsCompilerModule extends AbstractModule {
-
-  @Override
-  protected void configure() {
-    // nothing to configure here
-  }
-}
+// Based on <http://www.w3.org/TR/2000/ REC-DOM-Level-2-Core-20001113/
+// core.html#ID-1950641247>.
+var DOM_ELEMENT_NODE = 1;
+var DOM_ATTRIBUTE_NODE = 2;
+var DOM_TEXT_NODE = 3;
+var DOM_CDATA_SECTION_NODE = 4;
+var DOM_ENTITY_REFERENCE_NODE = 5;
+var DOM_ENTITY_NODE = 6;
+var DOM_PROCESSING_INSTRUCTION_NODE = 7;
+var DOM_COMMENT_NODE = 8;
+var DOM_DOCUMENT_NODE = 9;
+var DOM_DOCUMENT_TYPE_NODE = 10;
+var DOM_DOCUMENT_FRAGMENT_NODE = 11;
+var DOM_NOTATION_NODE = 12;

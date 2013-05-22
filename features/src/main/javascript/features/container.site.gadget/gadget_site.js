@@ -329,19 +329,13 @@ osapi.container.GadgetSite.prototype.render = function(
   this.updateSecurityToken_(gadgetInfo, localRenderParams);
 
   this.loadingGadgetHolder_.render(gadgetInfo, viewParams, localRenderParams);
-
-  this.onRender(gadgetInfo, viewParams, renderParams);
 };
 
 
 /**
  * Called when a gadget loads in the site. Uses double buffer, if present.
- * @param {Object} gadgetInfo the JSON gadget description.
- * @param {Object} viewParams Look at osapi.container.ViewParam.
- * @param {Object} renderParams Look at osapi.container.RenderParam.
  */
-osapi.container.GadgetSite.prototype.onRender = function(
-    gadgetInfo, viewParams, renderParams) {
+osapi.container.GadgetSite.prototype.onRender = function() {
   this.swapBuffers_();
 
   if (this.currentGadgetHolder_) {

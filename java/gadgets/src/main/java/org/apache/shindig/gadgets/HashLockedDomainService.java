@@ -147,6 +147,9 @@ public class HashLockedDomainService extends AbstractLockedDomainService {
     if (isEnabled()) {
       if (isGadgetReqestingLocking(gadget) || isHostUsingLockedDomain(host)
               || isDomainLockingEnforced(container)) {
+        if (isRefererCheckEnabled() && !isValidReferer(gadget, container)) {
+          return false;
+        }
         String neededHost;
         try {
           neededHost = getLockedDomain(gadget, container);
@@ -156,7 +159,7 @@ public class HashLockedDomainService extends AbstractLockedDomainService {
           }
           return false;
         }
-        return host.equals(neededHost);
+        return host.equalsIgnoreCase(neededHost);
       }
     }
     return true;
@@ -166,7 +169,7 @@ public class HashLockedDomainService extends AbstractLockedDomainService {
   public boolean isHostUsingLockedDomain(String host) {
     if (isEnabled()) {
       for (String suffix : this.lockedSuffixes.values()) {
-        if (host.endsWith(suffix)) {
+        if (host.toLowerCase().endsWith(suffix.toLowerCase())) {
           return true;
         }
       }

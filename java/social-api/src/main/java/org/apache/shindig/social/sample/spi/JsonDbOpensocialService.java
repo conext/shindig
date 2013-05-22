@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -29,7 +30,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.shindig.auth.AnonymousSecurityToken;
 import org.apache.shindig.auth.SecurityToken;
 import org.apache.shindig.common.servlet.Authority;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.common.util.ResourceLoader;
 import org.apache.shindig.protocol.DataCollection;
 import org.apache.shindig.protocol.ProtocolException;
@@ -194,7 +194,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           }
         }
       }
-      return ImmediateFuture.newInstance(new RestfulCollection<Activity>(result));
+      return Futures.immediateFuture(new RestfulCollection<Activity>(result));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -218,7 +218,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           }
         }
       }
-      return ImmediateFuture.newInstance(new RestfulCollection<Activity>(result));
+      return Futures.immediateFuture(new RestfulCollection<Activity>(result));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -236,7 +236,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           JSONObject activity = activities.getJSONObject(i);
           if (activity.get(Activity.Field.USER_ID.toString()).equals(user)
               && activity.get(Activity.Field.ID.toString()).equals(activityId)) {
-            return ImmediateFuture.newInstance(filterFields(activity, fields, Activity.class));
+            return Futures.immediateFuture(filterFields(activity, fields, Activity.class));
           }
         }
       }
@@ -272,7 +272,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
       }
       // What is the appropriate response here??
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -296,7 +296,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       }
       // TODO (woodser): if used with PUT, duplicate activity would be created?
       jsonArray.put(jsonObject);
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -347,7 +347,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       int last = options.getFirst() + options.getMax();
       result = result.subList(options.getFirst(), Math.min(last, totalSize));
 
-      return ImmediateFuture.newInstance(new RestfulCollection<Person>(result, options.getFirst(), totalSize, options.getMax()));
+      return Futures.immediateFuture(new RestfulCollection<Person>(result, options.getFirst(), totalSize, options.getMax()));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -362,7 +362,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       anonymous.setId(AnonymousSecurityToken.ANONYMOUS_ID);
       anonymous.setName(new NameImpl(ANONYMOUS_NAME));
       anonymous.setNickname(ANONYMOUS_NAME);
-      return ImmediateFuture.newInstance(anonymous);
+      return Futures.immediateFuture(anonymous);
     }
     try {
       JSONArray people = db.getJSONArray(PEOPLE_TABLE);
@@ -375,7 +375,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
               .toString()), fields);
           personObj.setAppData(appData);
 
-          return ImmediateFuture.newInstance(personObj);
+          return Futures.immediateFuture(personObj);
         }
       }
       throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST, "Person '" + id.getUserId(token) + "' not found");
@@ -411,7 +411,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           }
 
           people.put(i,curPerson);
-          return ImmediateFuture.newInstance(converter.convertToObject(curPerson.toString(), Person.class));
+          return Futures.immediateFuture(converter.convertToObject(curPerson.toString(), Person.class));
         }
       }
 
@@ -501,7 +501,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
         idToData.put(id, data);
       }
-      return ImmediateFuture.newInstance(new DataCollection(idToData));
+      return Futures.immediateFuture(new DataCollection(idToData));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -529,7 +529,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
       }
       db.getJSONObject(DATA_TABLE).put(user, newPersonData);
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -556,7 +556,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       for (Map.Entry<String, String> entry : values.entrySet()) {
         personData.put(entry.getKey(), entry.getValue());
       }
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -582,7 +582,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(), je);
     }
 
-    return ImmediateFuture.newInstance(new RestfulCollection<Group>(result));
+    return Futures.immediateFuture(new RestfulCollection<Group>(result));
   }
 
   /**
@@ -607,7 +607,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       }
     }
 
-    return ImmediateFuture.newInstance(null);
+    return Futures.immediateFuture(null);
   }
 
   /** {@inheritDoc} */
@@ -627,7 +627,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
 
         result.add(filterFields(msgColl, fields, MessageCollection.class));
       }
-      return ImmediateFuture.newInstance(new RestfulCollection<MessageCollection>(result));
+      return Futures.immediateFuture(new RestfulCollection<MessageCollection>(result));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
           je);
@@ -667,7 +667,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         result.add(filterFields(msg, fields, Message.class));
       }
 
-      return ImmediateFuture.newInstance(new RestfulCollection<Message>(result));
+      return Futures.immediateFuture(new RestfulCollection<Message>(result));
 
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
@@ -787,7 +787,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           album = userAlbums.getJSONObject(i);
           if (album.getString(Album.Field.ID.toString()).equals(albumId) &&
               album.getString(Album.Field.OWNER_ID.toString()).equals(user)) {
-            return ImmediateFuture.newInstance(filterFields(album, fields, Album.class));
+            return Futures.immediateFuture(filterFields(album, fields, Album.class));
           }
         }
       }
@@ -840,7 +840,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
 
         // Return found albums
-        return ImmediateFuture.newInstance(new RestfulCollection<Album>(result));
+        return Futures.immediateFuture(new RestfulCollection<Album>(result));
       }
 
       // Album table doesn't exist for user
@@ -875,7 +875,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           }
         }
       }
-      return ImmediateFuture.newInstance(new RestfulCollection<Album>(result));
+      return Futures.immediateFuture(new RestfulCollection<Album>(result));
     } catch (JSONException je) {
       throw new ProtocolException(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -913,7 +913,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       // Overwrite user's albums with updated list if album found
       if (targetFound) {
         db.getJSONObject(ALBUMS_TABLE).put(user, newAlbums);
-        return ImmediateFuture.newInstance(null);
+        return Futures.immediateFuture(null);
       } else {
         throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST, "Album ID " + albumId + " does not exist");
       }
@@ -950,7 +950,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
 
       // Insert new album into table
       userAlbums.put(jsonAlbum);
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -979,7 +979,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           JSONObject curAlbum = userAlbums.getJSONObject(i);
           if (curAlbum.getString(Album.Field.ID.toString()).equals(albumId)) {
             userAlbums.put(i, jsonAlbum);
-            return ImmediateFuture.newInstance(null);
+            return Futures.immediateFuture(null);
           }
         }
       }
@@ -1012,7 +1012,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           mediaItem = userMediaItems.getJSONObject(i);
           if (mediaItem.getString(MediaItem.Field.ID.toString()).equals(mediaItemId) &&
               mediaItem.getString(MediaItem.Field.ALBUM_ID.toString()).equals(albumId)) {
-            return ImmediateFuture.newInstance(filterFields(mediaItem, fields, MediaItem.class));
+            return Futures.immediateFuture(filterFields(mediaItem, fields, MediaItem.class));
           }
         }
       }
@@ -1066,7 +1066,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
 
         // Return found MediaItems
-        return ImmediateFuture.newInstance(new RestfulCollection<MediaItem>(result));
+        return Futures.immediateFuture(new RestfulCollection<MediaItem>(result));
       }
 
       // Table doesn't exist for user
@@ -1105,7 +1105,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
 
         // Return found MediaItems
-        return ImmediateFuture.newInstance(new RestfulCollection<MediaItem>(result));
+        return Futures.immediateFuture(new RestfulCollection<MediaItem>(result));
       }
 
       // Album wasn't found
@@ -1137,7 +1137,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           }
         }
       }
-      return ImmediateFuture.newInstance(new RestfulCollection<MediaItem>(result));
+      return Futures.immediateFuture(new RestfulCollection<MediaItem>(result));
     } catch (JSONException je) {
       throw new ProtocolException(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -1177,7 +1177,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
       // Overwrite user's MediaItems with updated list if target found
       if (targetFound) {
         db.getJSONObject(MEDIAITEMS_TABLE).put(user, newMediaItems);
-        return ImmediateFuture.newInstance(null);
+        return Futures.immediateFuture(null);
       } else {
         throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST, "MediaItem ID " + mediaItemId + " does not exist existin within Album " + albumId);
       }
@@ -1211,7 +1211,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
 
       // Insert new MediaItem into table
       userMediaItems.put(jsonMediaItem);
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -1243,7 +1243,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           if (curMediaItem.getString(MediaItem.Field.ID.toString()).equals(mediaItemId) &&
               curMediaItem.getString(MediaItem.Field.ALBUM_ID.toString()).equals(albumId)) {
             userMediaItems.put(i, jsonMediaItem);
-            return ImmediateFuture.newInstance(null);
+            return Futures.immediateFuture(null);
           }
         }
       }
@@ -1285,7 +1285,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         JSONObject entry = jsonArray.getJSONObject(i);
         if (entry.getString(ActivityEntry.Field.ID.toString()).equals(activityId)) {
           jsonArray.put(i, jsonEntry);
-          return ImmediateFuture.newInstance(filterFields(jsonEntry, fields, ActivityEntry.class));
+          return Futures.immediateFuture(filterFields(jsonEntry, fields, ActivityEntry.class));
         }
       }
       throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST, "Activity not found: " + activityId);
@@ -1321,7 +1321,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
       }
       jsonArray.put(jsonEntry);
-      return ImmediateFuture.newInstance(filterFields(jsonEntry, fields, ActivityEntry.class));
+      return Futures.immediateFuture(filterFields(jsonEntry, fields, ActivityEntry.class));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(), je);
     }
@@ -1347,7 +1347,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           db.getJSONObject(ACTIVITYSTREAMS_TABLE).put(user, newList);
         }
       }
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(), je);
     }
@@ -1364,7 +1364,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         for (int i = 0; i < activityEntries.length(); i++) {
           JSONObject activityEntry = activityEntries.getJSONObject(i);
           if (activityEntry.getString(ActivityEntry.Field.ID.toString()).equals(activityId)) {
-            return ImmediateFuture.newInstance(filterFields(activityEntry, fields, ActivityEntry.class));
+            return Futures.immediateFuture(filterFields(activityEntry, fields, ActivityEntry.class));
           }
         }
       }
@@ -1394,7 +1394,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
       }
       Collections.sort(result, Collections.reverseOrder());
-      return ImmediateFuture.newInstance(new RestfulCollection<ActivityEntry>(result));
+      return Futures.immediateFuture(new RestfulCollection<ActivityEntry>(result));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(), je);
     }
@@ -1426,7 +1426,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
         }
       }
       Collections.sort(result, Collections.reverseOrder());
-      return ImmediateFuture.newInstance(new RestfulCollection<ActivityEntry>(result));
+      return Futures.immediateFuture(new RestfulCollection<ActivityEntry>(result));
     } catch (JSONException je) {
       throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(), je);
     }

@@ -59,8 +59,7 @@ GadgetSiteTest.prototype.tearDown = function() {
 };
 
 GadgetSiteTest.prototype.testGetId = function() {
-  var site;
-  site = new osapi.container.GadgetSite(null, null, {});
+  var site = new osapi.container.GadgetSite(null, null, {});
   this.assertEquals(osapi.container.Site.prototype.nextUniqueSiteId_ - 1, site.getId());
   site = new osapi.container.GadgetSite(null, null, {});
   this.assertEquals(osapi.container.Site.prototype.nextUniqueSiteId_ - 1, site.getId());

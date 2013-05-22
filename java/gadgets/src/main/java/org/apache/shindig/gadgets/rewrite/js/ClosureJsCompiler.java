@@ -35,7 +35,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.shindig.common.cache.Cache;
 import org.apache.shindig.common.cache.CacheProvider;
 import org.apache.shindig.common.util.HashUtil;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.gadgets.features.ApiDirective;
 import org.apache.shindig.gadgets.features.FeatureRegistry.FeatureBundle;
 import org.apache.shindig.gadgets.http.HttpResponse;
@@ -49,7 +48,9 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.javascript.jscomp.BasicErrorManager;
 import com.google.javascript.jscomp.CheckLevel;
@@ -62,6 +63,7 @@ import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.Result;
 import com.google.javascript.jscomp.SourceFile;
 
+@Singleton
 public class ClosureJsCompiler implements JsCompiler {
   // Default stack size for the compiler threads. The value was copied from closure compiler class.
   private static final long DEFAULT_COMPILER_STACK_SIZE = 1048576L;
@@ -92,7 +94,12 @@ public class ClosureJsCompiler implements JsCompiler {
 
   @Inject
   public ClosureJsCompiler(DefaultJsCompiler defaultCompiler, CacheProvider cacheProvider,
-      @Named("shindig.closure.compile.level") String level) {
+          @Named("shindig.closure.compile.level") String level) {
+    this(defaultCompiler, cacheProvider, level, null);
+  }
+  
+  public ClosureJsCompiler(DefaultJsCompiler defaultCompiler, CacheProvider cacheProvider,
+          String level, ExecutorService executorService) {
     this.cache = cacheProvider.createCache(CACHE_NAME);
     this.defaultCompiler = defaultCompiler;
     List<SourceFile> externs = null;
@@ -106,7 +113,11 @@ public class ClosureJsCompiler implements JsCompiler {
     defaultExterns = externs;
 
     compileLevel = level.toLowerCase().trim();
-    compilerPool = createThreadPool();
+    if(executorService != null) {
+      compilerPool = executorService;
+    }else {
+      compilerPool = createThreadPool();
+    }
     Map<String, Future<CompileResult>> map = Maps.newHashMap();
     compiling = new ConcurrentHashMap<String, Future<CompileResult>>(map);
   }
@@ -170,6 +181,16 @@ public class ClosureJsCompiler implements JsCompiler {
     CompilerOptions options = getCompilerOptions(jsUri);
     StringBuilder compiled = new StringBuilder();
     StringBuilder exports = new StringBuilder();
+    boolean useExterns = compileLevel.equals("advanced");
+    if (!useExterns) {
+      /*
+       * Kicking the can down the road.  Advanced optimizations doesn't currently work with the closure compiler in shindig.
+       * When it's fixed, we need to make sure all externs are included (not just externs for what was requested) otherwise
+       * the cache key will fluctuate with the url hit, and we will get massive cache churn and possible DDOS scenarios
+       * when we recompile all requested modules on the fly because the cache key was different.
+       */
+      externs = "";
+    }
 
     // Add externs export to the list if set in options.
     if (options.isExternExportsEnabled()) {
@@ -207,13 +228,13 @@ public class ClosureJsCompiler implements JsCompiler {
                 compiling.put(cacheKey, future);
               }
             } else {
-              future = ImmediateFuture.newInstance(cached);
+              future = Futures.immediateFuture(cached);
             }
           }
         }
 
         if (future == null) {
-          future = ImmediateFuture.newInstance(new CompileResult(code.get()));
+          future = Futures.immediateFuture(new CompileResult(code.get()));
         }
         futures.add(future);
       }
@@ -222,9 +243,11 @@ public class ClosureJsCompiler implements JsCompiler {
       for (Future<CompileResult> future : futures) {
         CompileResult result = future.get();
         compiled.append(result.getContent());
-        String export = result.getExternExport();
-        if (export != null) {
-          exports.append(export);
+        if (useExterns) {
+          String export = result.getExternExport();
+          if (export != null) {
+            exports.append(export);
+          }
         }
       }
 

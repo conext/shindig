@@ -60,7 +60,7 @@ public class GadgetContext {
   /**
    * @return The module id for this request.
    */
-  public int getModuleId() {
+  public long getModuleId() {
     return delegate == null ? 0 : delegate.getModuleId();
   }
 
@@ -167,6 +167,10 @@ public class GadgetContext {
    */
   public String getRepository() {
     return delegate == null ? null : delegate.getRepository();
+  }
+
+  public String getReferer() {
+      return delegate == null ? null : delegate.getReferer();
   }
 }
 

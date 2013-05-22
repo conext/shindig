@@ -123,6 +123,7 @@
                 <source>../../../../src/test/javascript/features/mocks/window.js</source>
                 <source>../../../../src/test/javascript/features/mocks/xhr.js</source>
                 <source>globals/globals.js</source>
+                <source>domnode/constants.js</source>
                 <source>cloo/cloo.js</source>
                 <source>core.config.base/config.js</source>
                 <source>core.config/validators.js</source>
@@ -133,12 +134,12 @@
                 <source>core.util.base/base.js</source>
                 <source>core.util.dom/dom.js</source>
                 <source>core.util.event/event.js</source>
+                <source>core.log/log.js</source>
                 <source>core.util.onload/onload.js</source>
                 <source>core.util.string/string.js</source>
                 <source>core.util.urlparams/urlparams.js</source>
                 <source>core.util/util.js</source>
                 <source>core.prefs/prefs.js</source>
-                <source>core.log/log.js</source>
                 <source>core.io/io.js</source>
                 <source>container.util/constant.js</source>
                 <source>container.util/util.js</source>
@@ -258,9 +259,8 @@
           <suffix>.opt</suffix>
           <excludes>
             <exclude>**/*.xml</exclude>
-            <!-- Caja & swfobject are already minified -->
+            <!-- Caja is already minified -->
             <exclude>**/caja/*.js</exclude>
-            <exclude>**/swfobject/*.js</exclude>
           </excludes>
           <jswarn>false</jswarn>
           <statistics>false</statistics>
@@ -326,7 +326,6 @@
               <ext>js</ext>
               <exclude>
                 <param>.+.opt.js</param>
-                <param>swfobject.js</param>
               </exclude>
             </configuration>
           </plugin>

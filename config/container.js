@@ -120,6 +120,10 @@
 // Should all gadgets be forced on to a locked domain?
 "gadgets.uri.iframe.lockedDomainRequired" : false,
 
+// The permitted domain where the render request is sent from. For examle: ["www.hostA.com", "www.hostB.com"]
+// Empty means all domains are permitted.
+"shindig.locked-domain.permittedRefererDomains" : [],
+
 // Default Js Uri config: also must be overridden.
 // gadgets.uri.js.host should be protocol relative.
 "gadgets.uri.js.host" : "//${Cur['default.domain.unlocked.server']}", // Use unlocked host for better caching.
@@ -138,10 +142,10 @@
 "gadgets.uri.proxy.path" : "${CONTEXT_ROOT}/gadgets/proxy",
 
 // Enables/Disables feature administration
-"gadgets.admin.enableFeatureAdministration" : "false",
+"gadgets.admin.enableFeatureAdministration" : false,
 
 // Enables whitelist checks
-"gadgets.admin.enableGadgetWhitelist" : "false",
+"gadgets.admin.enableGadgetWhitelist" : false,
 
 // Max post size for posts through the makeRequest proxy.
 "gadgets.jsonProxyUrl.maxPostSize" : 5242880, // 5 MiB
@@ -182,6 +186,11 @@
       "isOnlyVisible" : false,
       "urlTemplate" : "http://localhost${CONTEXT_ROOT}/gadgets/default?{var}",
       "aliases" : ["home", "profile", "canvas"]
+    },
+    "embedded" : {
+      "isOnlyVisible" : false,
+      "urlTemplate" : "http://localhost${CONTEXT_ROOT}/gadgets/embedded?{var}",
+      "aliases" : ["embedded"]
     }
   },
   "tabs": {
@@ -281,9 +290,9 @@
   "opensocial" : {
     // Path to fetch opensocial data from
     // Must be on the same domain as the gadget rendering server
-    "path" : "http://%host%${CONTEXT_ROOT}/rpc",
+    "path" : "//%host%${CONTEXT_ROOT}/rpc",
     // Path to issue invalidate calls
-    "invalidatePath" : "http://%host%${CONTEXT_ROOT}/rpc",
+    "invalidatePath" : "//%host%${CONTEXT_ROOT}/rpc",
     "domain" : "shindig",
     "enableCaja" : false,
     "supportedFields" : {
@@ -331,4 +340,5 @@
     // This variable is needed during the container feature init.
     "jsPath" : "${Cur['gadgets.uri.js.path']}"
   }
-}}
+}
+}

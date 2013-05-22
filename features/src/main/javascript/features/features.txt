@@ -51,6 +51,7 @@ features/core.util.urlparams/feature.xml
 features/core/feature.xml
 features/defer.test/feature.xml
 features/deferjs/feature.xml
+features/domnode/feature.xml
 features/dynamic-height.height/feature.xml
 features/dynamic-height/feature.xml
 features/dynamic-size.util/feature.xml
@@ -103,7 +104,6 @@ features/shindig.uri/feature.xml
 features/shindig.uri.ext/feature.xml
 features/shindig.xhrwrapper/feature.xml
 features/skins/feature.xml
-features/swfobject/feature.xml
 features/tabs/feature.xml
 features/taming/feature.xml
 features/views/feature.xml

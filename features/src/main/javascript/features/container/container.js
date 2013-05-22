@@ -139,8 +139,9 @@ osapi.container.Container = function(opt_config) {
   this.tokenRefreshTimer_ = null;
 
   var self = this;
-  window[osapi.container.CallbackType.GADGET_ON_LOAD] = function(gadgetUrl, siteId){
-      self.applyLifecycleCallbacks_(osapi.container.CallbackType.ON_RENDER, gadgetUrl, siteId);
+  window[osapi.container.CallbackType.GADGET_ON_LOAD] = function(gadgetUrl, siteId) {
+    self.getSiteById(siteId).onRender();
+    self.applyLifecycleCallbacks_(osapi.container.CallbackType.ON_RENDER, gadgetUrl, siteId);
   };
 
   this.initializeMixins_();
@@ -446,10 +447,16 @@ osapi.container.Container.prototype.initializeMixins_ = function() {
 
 /**
  * Add list of gadgets to preload list
- * @param {Object} response hash of gadgets data.
+ *
+ * @param {Object}
+ *          response hash of gadgets data.
+ * @param {Object=}
+ *          opt_tokenResponse hash of gadget token data. Used in the case where the container is
+ *          initialized with tokens.
  * @private
  */
-osapi.container.Container.prototype.addPreloadGadgets_ = function(response) {
+osapi.container.Container.prototype.addPreloadGadgets_ = function(response, opt_tokenResponse) {
+  var tokenResponse = opt_tokenResponse || {};
   for (var id in response) {
     if (response[id].error) {
       var message = ['Failed to preload gadget ', id, '.'].join('');
@@ -460,8 +467,15 @@ osapi.container.Container.prototype.addPreloadGadgets_ = function(response) {
     } else {
       this.addPreloadedGadgetUrl_(id);
       if (response[id][osapi.container.MetadataResponse.NEEDS_TOKEN_REFRESH]) {
+        // Check the opt_tokenResponse for the TTL of any preloaded tokens
+        var tokenTTL;
+        if (tokenResponse[id]) {
+          tokenTTL = tokenResponse[id][osapi.container.TokenResponse.TOKEN_TTL];
+        } else {
+          tokenTTL = response[id][osapi.container.MetadataResponse.TOKEN_TTL];
+        }
         // Safe to re-schedule many times.
-        this.scheduleRefreshTokens_(response[id][osapi.container.MetadataResponse.TOKEN_TTL]);
+        this.scheduleRefreshTokens_(tokenTTL);
       }
     }
   }
@@ -481,10 +495,18 @@ osapi.container.Container.prototype.preloadCaches = function(preloadData) {
       preloadData, osapi.container.ContainerConfig.PRELOAD_TOKENS, {});
   var refTime = osapi.container.util.getSafeJsonValue(
       preloadData, osapi.container.ContainerConfig.PRELOAD_REF_TIME, null);
+  var gadgetUrls = [];//keys of gadgets
+  for(var k in gadgets) {
+      if (gadgets.hasOwnProperty(k)){
+          gadgetUrls.push(k);
+      }
+  }
 
+  this.applyLifecycleCallbacks_(osapi.container.CallbackType.ON_BEFORE_PRELOAD, gadgetUrls);
   this.service_.addGadgetMetadatas(gadgets, refTime);
   this.service_.addGadgetTokens(tokens, refTime);
-  this.addPreloadGadgets_(gadgets);
+  this.addPreloadGadgets_(gadgets, tokens);
+  this.applyLifecycleCallbacks_(osapi.container.CallbackType.ON_PRELOADED, gadgets);
 };
 
 
@@ -855,6 +877,31 @@ osapi.container.Container.prototype.refreshTokens_ = function() {
   });
 };
 
+
+/**
+ * invalidate all tokens, so next time the refreshToken_ is called, all the token will be refreshed.
+ * @private
+ */
+osapi.container.Container.prototype.invalidateAllTokens_ = function() {
+  var self = this;
+  for ( var siteId in self.sites_) {
+    var site = sites_[siteId];
+    if (site instanceof osapi.container.GadgetSite) {
+      var holder = site.getActiveSiteHolder();
+      var gadgetInfo = commonContainer.service_.getCachedGadgetMetadata(holder.getUrl());
+      gadgetInfo[osapi.container.MetadataResponse.NEEDS_TOKEN_REFRESH] = true;
+    }
+  }
+};
+
+/**
+ * Refresh all security tokens on all gadget sites immediately no matter it's needed or not. This
+ * will fetch gadget metadata, along with its token and have the token cache updated
+ */
+osapi.container.Container.prototype.forceRefreshAllTokens = function() {
+  this.invalidateAllTokens_();
+  this.refreshTokens_();
+};
 
 /**
  * invokes methods on the gadget lifecycle callback registered with the
