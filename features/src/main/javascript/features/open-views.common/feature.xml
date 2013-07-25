@@ -22,6 +22,7 @@ specific language governing permissions and limitations under the License.
   <dependency>rpc</dependency>
   <dependency>container</dependency>
   <dependency>views</dependency>
+  <dependency>osapi</dependency>
   <gadget>
     <script src="open-views-common-gadget.js"/>
     <api>

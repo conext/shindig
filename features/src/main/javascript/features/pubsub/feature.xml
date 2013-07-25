@@ -21,6 +21,7 @@ specific language governing permissions and limitations under the License.
   <dependency>globals</dependency>
   <dependency>taming</dependency>
   <dependency>rpc</dependency>
+  <dependency>osapi</dependency>
   <gadget>
     <script src="pubsub.js"/>
     <script src="taming.js" caja="1"/>
