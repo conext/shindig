@@ -21,6 +21,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>12</version>
+    </parent>
+
     <groupId>org.apache.shindig</groupId>
     <artifactId>shindig-project</artifactId>
     <version>2.5.0.ci-SNAPSHOT</version>
