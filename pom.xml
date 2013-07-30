@@ -21,12 +21,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache</groupId>
-        <artifactId>apache</artifactId>
-        <version>12</version>
-    </parent>
-
     <groupId>org.apache.shindig</groupId>
     <artifactId>shindig-project</artifactId>
     <version>2.5.0.ci-SNAPSHOT</version>
@@ -61,9 +55,9 @@
     <!-- S C M                                                                  -->
     <!-- ====================================================================== -->
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/shindig/tags/shindig-project-2.5.0.ci-SNAPSHOT</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/shindig/tags/shindig-project-2.5.0.ci-SNAPSHOT</developerConnection>
-        <url>http://svn.apache.org/viewvc/shindig/tags/shindig-project-2.5.0.ci-SNAPSHOT</url>
+        <connection>scm:git:https://github.com/conext/shindig/tree/2.5.0.ci-RELEASE</connection>
+        <developerConnection>scm:git:https://github.com/conext/shindig/tree/2.5.0.ci-RELEASE</developerConnection>
+        <url>scm:git:https://github.com/conext/shindig/tree/2.5.0.ci-RELEASE</url>
     </scm>
 
     <!-- ====================================================================== -->
@@ -1122,7 +1116,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.2.1</version>
+                    <version>2.4.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
