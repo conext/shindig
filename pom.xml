@@ -61,9 +61,9 @@
     <!-- S C M                                                                  -->
     <!-- ====================================================================== -->
     <scm>
-        <connection>scm:git:https://github.com/conext/shindig.git</connection>
-        <developerConnection>scm:git:https://github.com/conext/shindig.git</developerConnection>
-        <url>scm:git:https://github.com/conext/shindig.git</url>
+        <connection>scm:git:git@github.com:conext/shindig.git</connection>
+        <developerConnection>scm:git:git@github.com:conext/shindig.git</developerConnection>
+        <url>scm:git:git@github.com:conext/shindig.git</url>
   </scm>
 
     <!-- ====================================================================== -->
