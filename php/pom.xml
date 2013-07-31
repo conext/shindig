@@ -86,7 +86,7 @@
             </configuration>
           </execution>
           <!-- phpdocs -->
-	  <execution>
+<!--	  <execution>
 	    <id>phpdoc</id>
 	    <phase>pre-site</phase>
 	    <goals><goal>run</goal></goals>
@@ -100,35 +100,35 @@
 		  <arg value="target/site/phpdoc" />
 		  <arg value="-o" />
 		  <arg value="HTML:frames:DOM/default" />
-		  <arg value="--title" />
+		  <arg value="-title" />
 		  <arg value="Apache Shindig ${project.version}" />
 		</exec>
 	      </target>
 	    </configuration>
-	  </execution>
+	  </execution>-->
 	  
-          <!-- run phpunit -->
-          <execution>
-            <id>test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <mkdir dir="${surefire.reports}" />
-                <mkdir dir="${coverage.report}" />
-		<mkdir dir="target/tmp" />
-                <exec executable="phpunit" dir=".">
-                  <arg value="--verbose" />
-		  <env key="TMPDIR" value="${basedir}/target/tmp" />
-                </exec>
-                <xslt in="${surefire.reports}/phpunit-testresults.xml" out="${surefire.reports}/xslt.info" style="test/config/phpunit_to_surefire.xslt">
-                  <param name="outputDir" expression="." />
-                </xslt>
-              </target>
-            </configuration>
-          </execution>
+          <!--&lt;!&ndash; run phpunit &ndash;&gt;-->
+          <!--<execution>-->
+            <!--<id>test</id>-->
+            <!--<phase>test</phase>-->
+            <!--<goals>-->
+              <!--<goal>run</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+              <!--<target>-->
+                <!--<mkdir dir="${surefire.reports}" />-->
+                <!--<mkdir dir="${coverage.report}" />-->
+		<!--<mkdir dir="target/tmp" />-->
+                <!--<exec executable="phpunit" dir=".">-->
+                  <!--<arg value="-verbose" />-->
+		  <!--<env key="TMPDIR" value="${basedir}/target/tmp" />-->
+                <!--</exec>-->
+                <!--<xslt in="${surefire.reports}/phpunit-testresults.xml" out="${surefire.reports}/xslt.info" style="test/config/phpunit_to_surefire.xslt">-->
+                  <!--<param name="outputDir" expression="." />-->
+                <!--</xslt>-->
+              <!--</target>-->
+            <!--</configuration>-->
+          <!--</execution>-->
         </executions>
       </plugin>
     </plugins>
